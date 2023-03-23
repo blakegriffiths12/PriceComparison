@@ -56,7 +56,16 @@ def get_product_info():
 
 #------------------------------------------main---------------------------------------
 # Ask the user for their budget
-budget = float(input("Enter your budget: "))
+while True:
+    user_input = input("Enter a Budget: ")
+    if user_input.isdigit():
+        number = int(user_input)
+        break
+    else:
+        print("Invalid input. Please enter a number.")
+
+print("The entered number is:", number)
+
 products = []
 while True:
     add_product = input("Add a product? (y/n) ")
