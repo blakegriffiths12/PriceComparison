@@ -1,13 +1,8 @@
-'''
-  Name: Jack Seeler & Blake Griffiths 
-  James Hargest College
-  Programming Internal for 2.7 & 2.8 ~ 12 credits
-  Due: 6 April 2023
-  
-  TIP: Use assessment guide to help guide you through this Internal
-'''
-#---------------------------------imports---------------------------------------------
-#---------------------------------functions-------------------------------------------
+# import necessary modules
+from tkinter import *
+from tkinter import messagebox
+
+# function to check if the input is an integer
 def int_check_answer(question,error):
     valid=False 
     while not valid:
@@ -16,53 +11,91 @@ def int_check_answer(question,error):
           return(response)
         except ValueError:
             print (error)
+
 # function to calculate price per gram
 def price_per_gram(price, weight):
     return price / weight
+
+# function to compare prices and recommend the best value for money
 def compare_prices(budget, products):
-    """Compare prices of products and recommend the best value for money"""
     unit_prices = []
     for product in products:
         name, price, quantity = product
         unit_price = price / quantity
         unit_prices.append((name, unit_price))
-    # Sort the list of products by unit price
+    # sort the list of products by unit price
     unit_prices.sort(key=lambda x: x[1])
-    # Find the product that fits within the budget and has the lowest unit price
+    # find the product that fits within the budget and has the lowest unit price
     affordable_products = [p for p in unit_prices if p[1] <= budget]
     if not affordable_products:
         return "Sorry, you can't afford any of these products."
     else:
         best_value = affordable_products[0][0]
         return f"The best value for money is {best_value}."
+
+# function to get product information from user input
 def get_product_info():
-    """Get product information from user input"""
     name = input("Enter product name: ")
     price = float(input("Enter product price: "))
-    quantity = float(input("Enter product quantity : "))
+    quantity = float(input("Enter product quantity: "))
     return (name, price, quantity)
 
-#------------------------------------------main---------------------------------------
-# Ask the user for their budget
+# function to add a product
+def add_product():
+    product_info = get_product_info()
+    products.append(product_info)
+    update_display()
 
-while True:
-    budget = input("Enter a Budget: ")
+# function to update the display
+def update_display():
+    # clear the listbox
+    listbox.delete(0, END)
+    # add the products to the listbox
+    for product in products:
+        name, price, quantity = product
+        listbox.insert(END, f"{name} - ${price:.2f} ({quantity:.2f} units)")
+
+# function to handle the compare button click event
+def compare_button_click():
+    # get the budget from the entry widget
+    budget = budget_entry.get()
+    # check if the budget is a number
     if budget.isdigit():
-        number = int(budget)
-        break
+        budget = int(budget)
+        # call the compare_prices function and show the result in a messagebox
+        result = compare_prices(budget, products)
+        messagebox.showinfo("Result", result)
     else:
-        print("Invalid input. Please enter a number.")
+        messagebox.showerror("Error", "Invalid input. Please enter a number.")
 
-print("The entered number is:", number)
+# create the main window
+root = Tk()
+root.title("Price Comparison Tool")
+root.geometry("500x500")
 
+# create the widgets
+title_label = Label(root, text="Price Comparison Tool", font=("Arial", 20))
+budget_label = Label(root, text="Enter your budget:")
+budget_entry = Entry(root)
+add_button = Button(root, text="Add a product", command=add_product)
+compare_button = Button(root, text="Compare prices", command=compare_button_click)
+listbox_label = Label(root, text="Your products:")
+listbox = Listbox(root)
+
+# configure the widgets
+title_label.pack(pady=10)
+budget_label.pack(pady=10)
+budget_entry.pack(pady=10)
+add_button.pack(pady=10)
+listbox_label.pack(pady=10)
+listbox.pack(pady=10)
+compare_button.pack(pady=10)
+
+# initialize the products list
 products = []
-while True:
-    add_product = input("Add a product? (y/n) ")
-    if add_product.lower() == "n":
-        break
-    else:
-        product_info = get_product_info()
-        products.append(product_info)
-# Call the compare_prices function and print the result
-result = compare_prices(budget, products)
-print(result)
+
+# update the display
+update_display()
+
+# run the main loop
+root.mainloop()
