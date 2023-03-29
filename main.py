@@ -26,8 +26,8 @@ def price_per_gram(price, weight):
 
 
 
-def compare_prices(budget, products):
-    """Compare prices of products and recommend the best value for money"""
+def compare_prices(budget, products): 
+    "Compare prices of products and recommend the best value for money"
     unit_prices = []
     for product in products:
         name, price, quantity = product
@@ -57,9 +57,9 @@ def get_product_info():
 #------------------------------------------main---------------------------------------
 # Ask the user for their budget
 while True:
-    user_input = input("Enter a Budget: ")
-    if user_input.isdigit():
-        number = int(user_input)
+    budget = input("Enter a Budget: ")
+    if budget.isdigit():
+        number = int(budget)
         break
     else:
         print("Invalid input. Please enter a number.")
