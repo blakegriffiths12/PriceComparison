@@ -7,9 +7,6 @@
   TIP: Use assessment guide to help guide you through this Internal
 '''
 #---------------------------------imports---------------------------------------------
-
-
-
 #---------------------------------functions-------------------------------------------
 def int_check_answer(question,error):
     valid=False 
@@ -22,21 +19,15 @@ def int_check_answer(question,error):
 # function to calculate price per gram
 def price_per_gram(price, weight):
     return price / weight
-
-
-
-
-def compare_prices(budget, products): 
-    "Compare prices of products and recommend the best value for money"
+def compare_prices(budget, products):
+    """Compare prices of products and recommend the best value for money"""
     unit_prices = []
     for product in products:
         name, price, quantity = product
         unit_price = price / quantity
         unit_prices.append((name, unit_price))
-
     # Sort the list of products by unit price
     unit_prices.sort(key=lambda x: x[1])
-
     # Find the product that fits within the budget and has the lowest unit price
     affordable_products = [p for p in unit_prices if p[1] <= budget]
     if not affordable_products:
@@ -44,8 +35,6 @@ def compare_prices(budget, products):
     else:
         best_value = affordable_products[0][0]
         return f"The best value for money is {best_value}."
-
-
 def get_product_info():
     """Get product information from user input"""
     name = input("Enter product name: ")
@@ -53,9 +42,9 @@ def get_product_info():
     quantity = float(input("Enter product quantity : "))
     return (name, price, quantity)
 
-
 #------------------------------------------main---------------------------------------
 # Ask the user for their budget
+
 while True:
     budget = input("Enter a Budget: ")
     if budget.isdigit():
@@ -74,8 +63,6 @@ while True:
     else:
         product_info = get_product_info()
         products.append(product_info)
-
 # Call the compare_prices function and print the result
 result = compare_prices(budget, products)
 print(result)
-  
