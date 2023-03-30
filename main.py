@@ -1,106 +1,83 @@
-# import necessary modules
 import tkinter as tk
-from tkinter import messagebox
 
-# function to check if the input is an integer
 def int_check_answer(question,error):
-    valid=False 
+    valid = False 
     while not valid:
         try:
-          response=int(input(question))
-          return(response)
+            response = float(entry.get())
+            return(response)
         except ValueError:
-            print (error)
+            error_label.config(text=error)
 
 # function to calculate price per gram
 def price_per_gram(price, weight):
     return price / weight
-
-# function to compare prices and recommend the best value for money
-def compare_prices(budget, products):
+  
+def compare_prices():
+    """Compare prices of products and recommend the best value for money"""
+    budget = float(budget_entry.get())
+    products = []
+    for i in range(len(product_entries)):
+        name = product_entries[i][0].get()
+        price = float(product_entries[i][1].get())
+        quantity = float(product_entries[i][2].get())
+        products.append((name, price, quantity))
     unit_prices = []
     for product in products:
         name, price, quantity = product
         unit_price = price / quantity
         unit_prices.append((name, unit_price))
-    # sort the list of products by unit price
+    # Sort the list of products by unit price
     unit_prices.sort(key=lambda x: x[1])
-    # find the product that fits within the budget and has the lowest unit price
+    # Find the product that fits within the budget and has the lowest unit price
     affordable_products = [p for p in unit_prices if p[1] <= budget]
     if not affordable_products:
-        return "Sorry, you can't afford any of these products."
+        result_label.config(text="Sorry, you can't afford any of these products.")
     else:
         best_value = affordable_products[0][0]
-        return f"The best value for money is {best_value}."
+        result_label.config(text=f"The best value for money is {best_value}.")
 
-# function to get product information from user input
-def get_product_info():
-    name = input("Enter product name: ")
-    price = float(input("Enter product price: "))
-    quantity = float(input("Enter product quantity: "))
-    return (name, price, quantity)
-
-# function to add a product
 def add_product():
-    product_info = get_product_info()
-    products.append(product_info)
-    update_display()
+    product_frame = tk.Frame(root)
+    name_label = tk.Label(product_frame, text="Product name:")
+    name_entry = tk.Entry(product_frame)
+    name_label.pack(side=tk.LEFT)
+    name_entry.pack(side=tk.LEFT)
+    price_label = tk.Label(product_frame, text="Product price:")
+    price_entry = tk.Entry(product_frame)
+    price_label.pack(side=tk.LEFT)
+    price_entry.pack(side=tk.LEFT)
+    quantity_label = tk.Label(product_frame, text="Product quantity:")
+    quantity_entry = tk.Entry(product_frame)
+    quantity_label.pack(side=tk.LEFT)
+    quantity_entry.pack(side=tk.LEFT)
+    product_frame.pack()
+    product_entries.append((name_entry, price_entry, quantity_entry))
 
-# function to update the display
-def update_display():
-    # clear the listbox
-    listbox.delete(0, END)
-    # add the products to the listbox
-    for product in products:
-        name, price, quantity = product
-        listbox.insert(END, f"{name} - ${price:.2f} ({quantity:.2f} units)")
-
-# function to handle the compare button click event
-def compare_button_click():
-    # get the budget from the entry widget
-    budget = budget_entry.get()
-    # check if the budget is a number
-    if budget.isdigit():
-        budget = int(budget)
-        # call the compare_prices function and show the result in a messagebox
-        result = compare_prices(budget, products)
-        messagebox.showinfo("Result", result)
-    else:
-        messagebox.showerror("Error", "Invalid input. Please enter a number.")
-
-def exit_gui():
-  root.destroy()
-# create the main window
+# Create the main window
 root = tk.Tk()
 root.title("Price Comparison Tool")
-root.geometry("500x500")
 
-# create the widgets
-title_label = tk.Label(root, text="Price Comparison Tool", font=("Arial", 20))
-budget_label = tk.Label(root, text="Enter your budget:")
+# Create the budget entry field and label
+budget_label = tk.Label(root, text="Enter a Budget:")
+budget_label.pack()
 budget_entry = tk.Entry(root)
-add_button = tk.Button(root, text="Add a product", command=add_product)
-compare_button = tk.Button(root, text="Compare prices", command=compare_button_click)
-listbox_label = tk.Label(root, text="Your products:")
-listbox = tk.Listbox(root)
+budget_entry.pack()
 
-exit_button = tk.Button(root, text="Exit", command=exit_gui)
+# Create the add product button
+add_button = tk.Button(root, text="Add Product", command=add_product)
+add_button.pack()
 
-# configure the widgets
-title_label.pack(pady=10)
-budget_label.pack(pady=10)
-budget_entry.pack(pady=10)
-add_button.pack(pady=10)
-listbox_label.pack(pady=10)
-listbox.pack(pady=10)
-compare_button.pack(pady=10)
-exit_button.pack()
+# Create a list to hold the product entries
+product_entries = []
 
-# initialize the products list
-products = []
+# Create the compare button
+compare_button = tk.Button(root, text="Compare Prices", command=compare_prices)
+compare_button.pack()
 
-# update the display
-update_display()
+# Create the result label
+result_label = tk.Label(root, text="")
+result_label.pack()
 
-# run the main loop
+# Start the main loop
 root.mainloop()
