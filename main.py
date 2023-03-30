@@ -1,5 +1,5 @@
 # import necessary modules
-from tkinter import *
+import tkinter as tk
 from tkinter import messagebox
 
 # function to check if the input is an integer
@@ -68,19 +68,23 @@ def compare_button_click():
     else:
         messagebox.showerror("Error", "Invalid input. Please enter a number.")
 
+def exit_gui():
+  root.destroy()
 # create the main window
-root = Tk()
+root = tk.Tk()
 root.title("Price Comparison Tool")
 root.geometry("500x500")
 
 # create the widgets
-title_label = Label(root, text="Price Comparison Tool", font=("Arial", 20))
-budget_label = Label(root, text="Enter your budget:")
-budget_entry = Entry(root)
-add_button = Button(root, text="Add a product", command=add_product)
-compare_button = Button(root, text="Compare prices", command=compare_button_click)
-listbox_label = Label(root, text="Your products:")
-listbox = Listbox(root)
+title_label = tk.Label(root, text="Price Comparison Tool", font=("Arial", 20))
+budget_label = tk.Label(root, text="Enter your budget:")
+budget_entry = tk.Entry(root)
+add_button = tk.Button(root, text="Add a product", command=add_product)
+compare_button = tk.Button(root, text="Compare prices", command=compare_button_click)
+listbox_label = tk.Label(root, text="Your products:")
+listbox = tk.Listbox(root)
+
+exit_button = tk.Button(root, text="Exit", command=exit_gui)
 
 # configure the widgets
 title_label.pack(pady=10)
@@ -90,6 +94,7 @@ add_button.pack(pady=10)
 listbox_label.pack(pady=10)
 listbox.pack(pady=10)
 compare_button.pack(pady=10)
+exit_button.pack()
 
 # initialize the products list
 products = []
